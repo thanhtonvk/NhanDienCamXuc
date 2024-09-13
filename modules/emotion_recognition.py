@@ -91,7 +91,7 @@ class EmotionRecognition:
             'models/best_mobilenetv2.pth', map_location=device))
         self.model.to(device)
         self.model.eval()
-        self.model = build_vgg()
+        # self.model = build_vgg()
         # self.model = build_mbf_den_trang()
 
 
