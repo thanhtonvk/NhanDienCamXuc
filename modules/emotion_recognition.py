@@ -11,14 +11,14 @@ import torch.nn as nn
 device = "mps" if torch.backends.mps.is_available(
 ) else "cuda:0" if torch.cuda.is_available() else "cpu"
 transform = transforms.Compose([
-    transforms.Resize((48, 48)),
+    transforms.Resize((112, 112)),
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ])
 labels = ['tức giận', 'ghê tởm', 'sợ hãi', 'vui vẻ',
           'buồn', 'bất ngờ', 'tự nhiên', 'khinh miệt']
 
-labels = ['tức giận','ghê tởm','đáng sợ','vui vẻ','tự nhiên','buồn','ngạc nhiên']
+# labels = ['tức giận','ghê tởm','đáng sợ','vui vẻ','tự nhiên','buồn','ngạc nhiên']
 class VGG4(nn.Module):
     def __init__(self, num_classes=1000):
         super(VGG4, self).__init__()
@@ -81,18 +81,18 @@ def build_mbf_den_trang():
 
 class EmotionRecognition:
     def __init__(self):
-        self.model = build_mbf_den_trang()
-        # self.model = models.mobilenet_v2(weights=None)
-        # self.model.classifier = nn.Sequential(
-        #     nn.Linear(in_features=1280, out_features=8, bias=True),
-        #     nn.Softmax(-1)
-        # )
-        # self.model.load_state_dict(torch.load(
-        #     'models/best_mobilenetv2.pth', map_location=device))
-        # self.model.to(device)
-        # self.model.eval()
-        # self.model = build_vgg()
-        self.model = build_mbf_den_trang()
+        # self.model = build_mbf_den_trang()
+        self.model = models.mobilenet_v2(weights=None)
+        self.model.classifier = nn.Sequential(
+            nn.Linear(in_features=1280, out_features=8, bias=True),
+            nn.Softmax(-1)
+        )
+        self.model.load_state_dict(torch.load(
+            'models/best_mobilenetv2.pth', map_location=device))
+        self.model.to(device)
+        self.model.eval()
+        self.model = build_vgg()
+        # self.model = build_mbf_den_trang()
 
 
     def predict(self, image):
